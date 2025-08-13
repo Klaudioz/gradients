@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gradients - WebGL Gradient Generator</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/controls.css">
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_CLOUDFLARE_BEACON_TOKEN_HERE"}'></script>
+    <!-- End Cloudflare Web Analytics -->
+</head>
+<body>
+    <canvas id="gradient-canvas"></canvas>
+    
+    <!-- Top Left Controls -->
+    <div class="controls top-left">
+        <button id="embed-btn" class="control-btn" title="Embed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 3L4 7L8 11M16 3L20 7L16 11M12 21L12 3"/>
+            </svg>
+            Embed
+        </button>
+        <button id="record-btn" class="control-btn" title="Record">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+            </svg>
+            Record
+        </button>
+        <button id="share-btn" class="control-btn" title="Share">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 8C19.1 8 20 7.1 20 6S19.1 4 18 4 16 4.9 16 6C16 6.18 16.04 6.36 16.1 6.53L10.92 9.39C10.45 8.88 9.78 8.53 9 8.53C7.9 8.53 7 9.43 7 10.53S7.9 12.53 9 12.53C9.78 12.53 10.45 12.18 10.92 11.67L16.1 14.53C16.04 14.7 16 14.88 16 15.06C16 16.16 16.9 17.06 18 17.06S20 16.16 20 15.06 19.1 14.06 18 14.06C17.22 14.06 16.55 14.41 16.08 14.92L10.9 12.06C10.96 11.89 11 11.71 11 11.53S10.96 11.17 10.9 11L16.08 8.14C16.55 8.65 17.22 9 18 9V8Z"/>
+            </svg>
+            Share
+        </button>
+        <button id="randomize-btn" class="control-btn" title="Randomize">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4C7.58 4 4 7.58 4 12S7.58 20 12 20C15.73 20 18.84 17.45 19.73 14H17.65C16.83 16.33 14.61 18 12 18C8.69 18 6 15.31 6 12S8.69 6 12 6C13.66 6 15.14 6.69 16.22 7.78L13 11H20V4L17.65 6.35Z"/>
+            </svg>
+            Randomize
+        </button>
+    </div>
+
+    <!-- Top Right Configuration Panel -->
+    <div class="controls top-right">
+        <div class="color-panel">
+            <h3>Colors</h3>
+            <div class="color-inputs">
+                <div class="color-input-group">
+                    <label>Color 1</label>
+                    <input type="color" id="color1" value="#ff6b6b">
+                </div>
+                <div class="color-input-group">
+                    <label>Color 2</label>
+                    <input type="color" id="color2" value="#4ecdc4">
+                </div>
+                <div class="color-input-group">
+                    <label>Color 3</label>
+                    <input type="color" id="color3" value="#45b7d1">
+                </div>
+                <div class="color-input-group">
+                    <label>Color 4</label>
+                    <input type="color" id="color4" value="#f7dc6f">
+                </div>
+            </div>
+        </div>
+
+        <div class="animation-panel">
+            <h3>Animation</h3>
+            <div class="slider-group">
+                <label>Speed</label>
+                <input type="range" id="speed-slider" min="0" max="2" step="0.1" value="1">
+                <span id="speed-value">1.0</span>
+            </div>
+            <div class="slider-group">
+                <label>Complexity</label>
+                <input type="range" id="complexity-slider" min="1" max="5" step="1" value="3">
+                <span id="complexity-value">3</span>
+            </div>
+            <div class="slider-group">
+                <label>Scale</label>
+                <input type="range" id="scale-slider" min="0.5" max="3" step="0.1" value="1">
+                <span id="scale-value">1.0</span>
+            </div>
+        </div>
+
+        <div class="export-panel">
+            <h3>Export</h3>
+            <div class="export-buttons">
+                <button id="export-png" class="export-btn">PNG</button>
+                <button id="export-svg" class="export-btn">SVG</button>
+                <button id="export-css" class="export-btn">CSS</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Right Presets -->
+    <div class="preset-controls">
+        <div class="preset-grid">
+            <button class="preset-btn" data-preset="default">Default</button>
+            <button class="preset-btn" data-preset="warm">Warm</button>
+            <button class="preset-btn" data-preset="cool">Cool</button>
+            <button class="preset-btn" data-preset="contrast">High Contrast</button>
+            <button class="preset-btn" data-preset="cinematic">Cinematic</button>
+            <button class="preset-btn" data-preset="vintage">Vintage</button>
+            <button class="preset-btn" data-preset="neon">Neon</button>
+            <button class="preset-btn" data-preset="sunset">Sunset</button>
+            <button class="preset-btn" data-preset="cyberpunk">Cyberpunk</button>
+            <button class="preset-btn" data-preset="ocean">Ocean</button>
+            <button class="preset-btn" data-preset="forest">Forest</button>
+            <button class="preset-btn" data-preset="fire">Fire</button>
+            <button class="preset-btn" data-preset="purple">Purple</button>
+            <button class="preset-btn" data-preset="gold">Gold</button>
+            <button class="preset-btn" data-preset="ice">Ice</button>
+            <button class="preset-btn" data-preset="desert">Desert</button>
+            <button class="preset-btn" data-preset="night">Night</button>
+            <button class="preset-btn" data-preset="spring">Spring</button>
+            <button class="preset-btn" data-preset="autumn">Autumn</button>
+            <button class="preset-btn" data-preset="electric">Electric</button>
+            <button class="preset-btn" data-preset="blood">Blood</button>
+            <button class="preset-btn" data-preset="cosmic">Cosmic</button>
+            <button class="preset-btn" data-preset="lava">Lava</button>
+            <button class="preset-btn" data-preset="mint">Mint</button>
+        </div>
+    </div>
+
+    <!-- Modal for embed code -->
+    <div id="embed-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Embed Code</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <textarea id="embed-code" readonly></textarea>
+                <button id="copy-embed" class="copy-btn">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/webgl.js"></script>
+    <script src="js/gradients.js"></script>
+    <script src="js/presets.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

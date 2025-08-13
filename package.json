@@ -1,0 +1,16 @@
+{
+  "name": "gradients",
+  "version": "1.0.0",
+  "description": "WebGL gradient generator inspired by craft-gradients.artcreativecode.com",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "setup-analytics": "node scripts/setup-analytics.js"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  },
+  "dependencies": {
+    "playwright": "^1.54.2"
+  }
+}
