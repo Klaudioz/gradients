@@ -8,6 +8,7 @@ class ControlsManager {
         
         this.initializeControls();
         this.bindEvents();
+        this.initializeMobileLayout();
     }
     
     initializeControls() {
@@ -17,6 +18,14 @@ class ControlsManager {
     }
     
     bindEvents() {
+        // Mobile advanced controls toggle
+        document.getElementById('advanced-controls-toggle').addEventListener('click', () => this.toggleAdvancedControls());
+        
+        // Collapsible sections
+        document.querySelectorAll('.section-header').forEach(header => {
+            header.addEventListener('click', (e) => this.toggleSection(e.target.closest('.section-header')));
+        });
+        
         // Top-left controls
         document.getElementById('embed-btn').addEventListener('click', () => this.showEmbedModal());
         document.getElementById('record-btn').addEventListener('click', () => this.toggleRecording());
@@ -295,10 +304,22 @@ class ControlsManager {
     }
     
     async shareGradient() {
-        // Create Twitter/X share URL
-        const currentUrl = window.location.href;
-        const tweetText = 'Check out this amazing WebGL gradient I created with Craft Gradients! 🎨✨';
-        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(currentUrl)}`;
+        // Generate URL with current gradient state
+        const encodedGradient = this.engine.encodeToURL();
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareUrl = `${baseUrl}?g=${encodedGradient}`;
+        
+        // Create more specific tweet text based on current preset or custom gradient
+        const currentPreset = this.presetManager.getCurrentPreset();
+        let tweetText;
+        
+        if (currentPreset) {
+            tweetText = `Check out my ${currentPreset} animated gradient! 🎨✨`;
+        } else {
+            tweetText = 'Check out my custom animated gradient! 🎨✨';
+        }
+        
+        const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
         
         // Try native sharing first (mobile browsers)
         if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
@@ -306,7 +327,7 @@ class ControlsManager {
                 await navigator.share({
                     title: 'Beautiful WebGL Gradient',
                     text: tweetText,
-                    url: currentUrl
+                    url: shareUrl
                 });
                 return;
             } catch (error) {
@@ -322,11 +343,11 @@ class ControlsManager {
                 this.showShareNotification('Twitter/X share opened in new tab!');
             } else {
                 // Popup blocked, fallback to clipboard
-                await this.fallbackShare(currentUrl, tweetText);
+                await this.fallbackShare(shareUrl, tweetText);
             }
         } catch (error) {
             console.error('Twitter share failed:', error);
-            await this.fallbackShare(currentUrl, tweetText);
+            await this.fallbackShare(shareUrl, tweetText);
         }
     }
     
@@ -370,6 +391,49 @@ class ControlsManager {
                 document.body.removeChild(notification);
             }
         }, 3000);
+    }
+    
+    toggleAdvancedControls() {
+        const toggle = document.getElementById('advanced-controls-toggle');
+        const panel = document.getElementById('advanced-controls');
+        
+        toggle.classList.toggle('active');
+        panel.classList.toggle('mobile-open');
+    }
+    
+    toggleSection(header) {
+        // Only work on mobile
+        if (window.innerWidth > 768) return;
+        
+        const section = header.dataset.section;
+        const content = document.getElementById(`${section}-content`);
+        const icon = header.querySelector('.section-icon');
+        
+        // Close other sections
+        document.querySelectorAll('.section-content').forEach(otherContent => {
+            if (otherContent !== content && otherContent.classList.contains('open')) {
+                otherContent.classList.remove('open');
+                const otherHeader = document.querySelector(`[data-section="${otherContent.id.replace('-content', '')}"]`);
+                if (otherHeader) {
+                    otherHeader.classList.remove('active');
+                }
+            }
+        });
+        
+        // Toggle current section
+        content.classList.toggle('open');
+        header.classList.toggle('active');
+    }
+    
+    initializeMobileLayout() {
+        // Initialize with Colors section open on mobile
+        if (window.innerWidth <= 768) {
+            const colorsContent = document.getElementById('colors-content');
+            const colorsHeader = document.querySelector('[data-section="colors"]');
+            
+            colorsContent.classList.add('open');
+            colorsHeader.classList.add('active');
+        }
     }
 }
 

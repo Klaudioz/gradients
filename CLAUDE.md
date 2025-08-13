@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture Overview
 
-This is a WebGL-powered gradient generator deployed on Cloudflare Workers as a static site. The application follows a modular JavaScript architecture with distinct responsibilities:
+This is a WebGL-powered gradient generator deployed on Cloudflare Workers with secure analytics integration. The application follows a modular JavaScript architecture with distinct responsibilities and implements security best practices:
 
 ### Core Application Flow
 1. **GradientApp** (`main.js`) - Main orchestrator that initializes all components and manages the render loop
@@ -35,10 +35,12 @@ This is a WebGL-powered gradient generator deployed on Cloudflare Workers as a s
 - All components listen to engine changes via onChange callbacks
 
 ### UI Architecture
-- Three control panels positioned absolutely: top-left (actions), top-right (configuration), bottom-right (export)
+- Three control panels positioned absolutely: top-left (actions), top-right (configuration), bottom-right (24 presets)
+- Unified dark button styling across all UI elements with consistent hover effects
 - Modal system for embed code display
 - Real-time color pickers and range sliders bound to engine state
-- Responsive design with mobile breakpoints
+- Responsive design with mobile breakpoints and collapsible sections
+- Cyberpunk theme as default preset for visual impact
 
 ### Export System
 - PNG export creates high-resolution canvas render (1920x1080)
@@ -47,17 +49,19 @@ This is a WebGL-powered gradient generator deployed on Cloudflare Workers as a s
 - Canvas recording for WebM video export using MediaRecorder API
 
 ### Deployment
-- Cloudflare Workers with static assets configuration
-- All assets served from `/public/` directory
+- Cloudflare Workers with static assets configuration and custom Worker logic
+- All assets served from `/public/` directory via KV asset handler
 - Single-page application routing with fallback handling
 - Global CDN distribution for performance
+- HTMLRewriter for secure runtime content manipulation
 
-### Analytics Implementation
-- Dual analytics setup: HTMLRewriter + direct JavaScript injection
-- HTMLRewriter automatically injects beacon script into HTML responses
-- Environment variable `CF_BEACON_TOKEN` for secure token management
-- Setup script (`npm run setup-analytics`) for easy configuration
-- Fallback direct HTML injection if environment variable not set
+### Analytics Implementation (Security-First)
+- **Secure Token Management**: Environment variable `CLOUDFLARE_BEACON_TOKEN` 
+- **HTMLRewriter Integration**: Runtime token injection without exposing secrets
+- **No Hardcoded Tokens**: Analytics script uses placeholder replaced at edge
+- **Setup Script**: `npm run setup-analytics` for secure configuration
+- **Production Ready**: Supports Wrangler secrets and dashboard environment variables
+- **Version Control Safe**: No sensitive data committed to repository
 
 ## Key Implementation Details
 
@@ -73,8 +77,22 @@ The fragment shader implements multi-octave noise using:
 - Complexity parameter controls noise octave blending
 - Scale parameter adjusts pattern size
 
+### Preset System
+- 24 comprehensive presets covering various themes and moods
+- Preset categories: Basic, Themed, Seasonal, Artistic, Sophisticated
+- Default cyberpunk preset for visual impact
+- Active preset highlighting with unified button styling
+- Smooth transitions between preset applications
+
+### Security Architecture
+- Environment variable management for sensitive data
+- HTMLRewriter for secure runtime content manipulation
+- No secrets exposed in client-side code or source control
+- Secure analytics token injection at Cloudflare edge
+
 ### Browser Compatibility
 - WebGL fallback error handling for unsupported browsers
 - MediaRecorder API feature detection for recording functionality
 - Canvas export compatibility across browsers
-- Mobile-responsive touch controls
+- Mobile-responsive touch controls with collapsible panels
+- Progressive enhancement for graceful degradation

@@ -69,8 +69,20 @@ class GradientApp {
         // Initialize export manager
         this.exportManager = new ExportManager(this.engine, this.canvas);
         
-        // Apply initial preset
-        this.presetManager.applyPreset('default');
+        // Check for gradient state in URL first
+        const urlParams = new URLSearchParams(window.location.search);
+        const gradientState = urlParams.get('g');
+        
+        if (gradientState && this.engine.decodeFromURL(gradientState)) {
+            // Successfully loaded gradient from URL
+            console.log('Loaded gradient from URL');
+        } else {
+            // Apply initial preset if no URL state
+            this.presetManager.applyPreset('cyberpunk');
+        }
+        
+        // Update preset button highlighting
+        this.controlsManager.updatePresetButtons();
     }
     
     startRenderLoop() {

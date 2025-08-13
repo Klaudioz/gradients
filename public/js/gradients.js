@@ -103,6 +103,54 @@ class GradientEngine {
         return this.settings;
     }
     
+    // URL encoding/decoding for sharing
+    encodeToURL() {
+        const state = {
+            c: [
+                this.settings.colors.color1,
+                this.settings.colors.color2,
+                this.settings.colors.color3,
+                this.settings.colors.color4
+            ],
+            s: this.settings.animation.speed,
+            x: this.settings.animation.complexity,
+            z: this.settings.animation.scale
+        };
+        
+        // Convert to base64 for compact URL
+        const jsonString = JSON.stringify(state);
+        return btoa(jsonString).replace(/[+/=]/g, (m) => ({'+':'-', '/':'_', '=':''}[m]));
+    }
+    
+    decodeFromURL(encoded) {
+        try {
+            // Restore base64 padding and characters
+            const base64 = encoded.replace(/[-_]/g, (m) => ({'-':'+', '_':'/'}[m])) + '=='.slice(0, (4 - encoded.length % 4) % 4);
+            const jsonString = atob(base64);
+            const state = JSON.parse(jsonString);
+            
+            if (state.c && Array.isArray(state.c) && state.c.length === 4) {
+                this.settings.colors = {
+                    color1: state.c[0],
+                    color2: state.c[1],
+                    color3: state.c[2],
+                    color4: state.c[3]
+                };
+            }
+            
+            if (typeof state.s === 'number') this.settings.animation.speed = state.s;
+            if (typeof state.x === 'number') this.settings.animation.complexity = state.x;
+            if (typeof state.z === 'number') this.settings.animation.scale = state.z;
+            
+            this.settings.currentPreset = null; // Clear preset when loading from URL
+            this.notifyChange();
+            return true;
+        } catch (error) {
+            console.error('Failed to decode gradient from URL:', error);
+            return false;
+        }
+    }
+    
     generateCSS() {
         const { color1, color2, color3, color4 } = this.settings.colors;
         
@@ -134,10 +182,25 @@ animation: gradientShift 8s ease infinite;
     }
     
     generateEmbedCode() {
-        const css = this.generateCSS();
+        const { color1, color2, color3, color4 } = this.settings.colors;
+        const gradientId = `gradient-${Date.now()}`;
         
         return `<!-- Gradient Background -->
-<div style="${css.replace(/\n/g, ' ').replace(/\s+/g, ' ')}">
+<style>
+.${gradientId} {
+    background: linear-gradient(45deg, ${color1}, ${color2}, ${color3}, ${color4});
+    background-size: 400% 400%;
+    animation: gradientShift-${gradientId} 8s ease infinite;
+}
+
+@keyframes gradientShift-${gradientId} {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+</style>
+
+<div class="${gradientId}">
     <!-- Your content here -->
 </div>`;
     }

@@ -1,8 +1,14 @@
 {
   "name": "gradients",
+  "main": "src/index.js",
   "compatibility_date": "2025-01-29",
   "assets": {
     "directory": "./public",
     "not_found_handling": "single-page-application"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true
+    }
   }
 }

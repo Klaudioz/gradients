@@ -39,12 +39,85 @@ body {
     gap: 8px;
 }
 
+.advanced-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    backdrop-filter: blur(20px);
+    z-index: 15;
+}
+
+.advanced-toggle:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.advanced-toggle.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
 .top-right {
     top: 20px;
     right: 20px;
     width: 280px;
     max-height: calc(100vh - 40px);
     overflow-y: auto;
+}
+
+.collapsible-section {
+    margin-bottom: 8px;
+}
+
+.section-header {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+}
+
+.section-header:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.section-icon {
+    transition: transform 0.3s ease;
+}
+
+.section-header.active .section-icon {
+    transform: rotate(180deg);
+}
+
+.section-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 16px;
+}
+
+.section-content.open {
+    max-height: 500px;
+    padding: 16px;
 }
 
 .preset-controls {
@@ -58,26 +131,33 @@ body {
     padding: 16px;
     border: 1px solid rgba(51, 51, 51, 0.5);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    z-index: 10;
 }
 
 .control-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    background: rgba(26, 26, 26, 1);
+    border: 1px solid rgba(51, 51, 51, 1);
+    border-radius: 6px;
     padding: 8px 12px;
     color: white;
-    font-size: 14px;
+    font-size: 11px;
+    font-weight: 500;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
-    backdrop-filter: blur(10px);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .control-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(51, 51, 51, 0.8);
+    border-color: rgba(102, 102, 102, 0.8);
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .control-btn:active {
@@ -176,14 +256,29 @@ h3 {
     }
     
     .top-right {
-        top: 10px;
+        display: none;
+        top: 70px;
+        left: 10px;
         right: 10px;
-        width: 240px;
+        width: auto;
+        max-height: calc(100vh - 200px);
     }
     
-    .bottom-right {
-        bottom: 10px;
+    .top-right.mobile-open {
+        display: block;
+    }
+    
+    .advanced-toggle {
+        display: flex;
+        top: 10px;
         right: 10px;
+    }
+    
+    .preset-controls {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        max-width: none;
     }
     
     .control-btn {
@@ -193,5 +288,42 @@ h3 {
     
     .controls {
         padding: 12px;
+    }
+    
+    .section-content.open {
+        max-height: 300px;
+    }
+}
+
+@media (min-width: 769px) {
+    .advanced-toggle {
+        display: none !important;
+    }
+    
+    .top-right {
+        display: block !important;
+    }
+    
+    .section-content {
+        max-height: none !important;
+        padding: 16px !important;
+        overflow: visible !important;
+    }
+    
+    .section-header {
+        pointer-events: none;
+        background: transparent !important;
+        border: none !important;
+        padding: 0 !important;
+        margin-bottom: 12px;
+    }
+    
+    .section-header span {
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    .section-icon {
+        display: none;
     }
 }

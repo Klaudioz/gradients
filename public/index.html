@@ -41,55 +41,84 @@
         </button>
     </div>
 
-    <!-- Top Right Configuration Panel -->
-    <div class="controls top-right">
-        <div class="color-panel">
-            <h3>Colors</h3>
-            <div class="color-inputs">
-                <div class="color-input-group">
-                    <label>Color 1</label>
-                    <input type="color" id="color1" value="#ff6b6b">
-                </div>
-                <div class="color-input-group">
-                    <label>Color 2</label>
-                    <input type="color" id="color2" value="#4ecdc4">
-                </div>
-                <div class="color-input-group">
-                    <label>Color 3</label>
-                    <input type="color" id="color3" value="#45b7d1">
-                </div>
-                <div class="color-input-group">
-                    <label>Color 4</label>
-                    <input type="color" id="color4" value="#f7dc6f">
+    <!-- Mobile Advanced Controls Toggle -->
+    <button id="advanced-controls-toggle" class="advanced-toggle">
+        <span>Advanced Gradient Controls</span>
+        <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7 10l5 5 5-5z"/>
+        </svg>
+    </button>
+
+    <!-- Advanced Controls Panel -->
+    <div id="advanced-controls" class="controls top-right">
+        <div class="collapsible-section">
+            <button class="section-header" data-section="colors">
+                <span>Colors</span>
+                <svg class="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </button>
+            <div class="section-content" id="colors-content">
+                <div class="color-inputs">
+                    <div class="color-input-group">
+                        <label>Color 1</label>
+                        <input type="color" id="color1" value="#ff6b6b">
+                    </div>
+                    <div class="color-input-group">
+                        <label>Color 2</label>
+                        <input type="color" id="color2" value="#4ecdc4">
+                    </div>
+                    <div class="color-input-group">
+                        <label>Color 3</label>
+                        <input type="color" id="color3" value="#45b7d1">
+                    </div>
+                    <div class="color-input-group">
+                        <label>Color 4</label>
+                        <input type="color" id="color4" value="#f7dc6f">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="animation-panel">
-            <h3>Animation</h3>
-            <div class="slider-group">
-                <label>Speed</label>
-                <input type="range" id="speed-slider" min="0" max="2" step="0.1" value="1">
-                <span id="speed-value">1.0</span>
-            </div>
-            <div class="slider-group">
-                <label>Complexity</label>
-                <input type="range" id="complexity-slider" min="1" max="5" step="1" value="3">
-                <span id="complexity-value">3</span>
-            </div>
-            <div class="slider-group">
-                <label>Scale</label>
-                <input type="range" id="scale-slider" min="0.5" max="3" step="0.1" value="1">
-                <span id="scale-value">1.0</span>
+        <div class="collapsible-section">
+            <button class="section-header" data-section="animation">
+                <span>Animation</span>
+                <svg class="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </button>
+            <div class="section-content" id="animation-content">
+                <div class="slider-group">
+                    <label>Speed</label>
+                    <input type="range" id="speed-slider" min="0" max="2" step="0.1" value="1">
+                    <span id="speed-value">1.0</span>
+                </div>
+                <div class="slider-group">
+                    <label>Complexity</label>
+                    <input type="range" id="complexity-slider" min="1" max="5" step="1" value="3">
+                    <span id="complexity-value">3</span>
+                </div>
+                <div class="slider-group">
+                    <label>Scale</label>
+                    <input type="range" id="scale-slider" min="0.5" max="3" step="0.1" value="1">
+                    <span id="scale-value">1.0</span>
+                </div>
             </div>
         </div>
 
-        <div class="export-panel">
-            <h3>Export</h3>
-            <div class="export-buttons">
-                <button id="export-png" class="export-btn">PNG</button>
-                <button id="export-svg" class="export-btn">SVG</button>
-                <button id="export-css" class="export-btn">CSS</button>
+        <div class="collapsible-section">
+            <button class="section-header" data-section="export">
+                <span>Export/Import</span>
+                <svg class="section-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M7 10l5 5 5-5z"/>
+                </svg>
+            </button>
+            <div class="section-content" id="export-content">
+                <div class="export-buttons">
+                    <button id="export-png" class="export-btn">PNG</button>
+                    <button id="export-svg" class="export-btn">SVG</button>
+                    <button id="export-css" class="export-btn">CSS</button>
+                </div>
             </div>
         </div>
     </div>

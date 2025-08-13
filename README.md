@@ -8,21 +8,27 @@ A WebGL-powered gradient generator inspired by [craft-gradients.artcreativecode.
 - **Custom Fragment Shaders** - Noise-based algorithms for organic, flowing patterns
 - **4-Color Blending** - Mix up to 4 colors with smooth transitions
 - **Dynamic Animation** - Adjustable speed, complexity, and scale parameters
+- **Cyberpunk Default** - Eye-catching cyberpunk theme as the default preset
 
 ### Interactive Controls
 - **Top Left Panel**
   - 🔗 **Embed** - Generate HTML embed codes
-  - 🎬 **Record** - Canvas recording to WebM video
-  - 📤 **Share** - Native sharing with clipboard fallback
+  - 🎬 **Record** - Canvas recording to WebM video (10-second limit)
+  - 📤 **Share** - Native sharing with Twitter/X integration and clipboard fallback
   - 🎲 **Randomize** - Generate random gradient combinations
 
-- **Top Right Panel**
-  - 🎨 **8 Presets** - Warm, Cool, High Contrast, Cinematic, Vintage, Neon, Sunset, Ocean
-  - 🌈 **Color Pickers** - Real-time color modification
+- **Top Right Panel** 
+  - 🌈 **Color Pickers** - Real-time 4-color modification
   - ⚡ **Animation Controls** - Speed, complexity, and scale sliders
+  - 📥 **Export Options** - PNG (1920x1080), SVG, and CSS formats
 
 - **Bottom Right Panel**
-  - 📥 **Export Options** - PNG (1920x1080), SVG, and CSS formats
+  - 🎨 **24 Presets** - Complete gradient library including:
+    - **Basic**: Default, Warm, Cool, High Contrast
+    - **Themed**: Cinematic, Vintage, Cyberpunk, Ocean, Forest, Fire
+    - **Seasonal**: Spring, Autumn, Winter (Ice), Desert
+    - **Artistic**: Neon, Electric, Cosmic, Blood, Lava
+    - **Sophisticated**: Purple, Gold, Night, Mint, Sunset
 
 ### Export Formats
 - **PNG** - High-resolution image export
@@ -56,7 +62,7 @@ The development server will start at `http://localhost:8787`
 
 ### Analytics Setup (Optional)
 ```bash
-# Configure Cloudflare Web Analytics
+# Configure Cloudflare Web Analytics (secure environment variable setup)
 npm run setup-analytics
 ```
 
@@ -76,22 +82,29 @@ npm run deploy
 - **Export Manager** - Multiple format export functionality
 
 ### Technology Stack
-- **WebGL** - Custom vertex and fragment shaders
-- **Vanilla JavaScript** - Modular ES6+ architecture
-- **CSS Grid/Flexbox** - Responsive UI design
-- **Cloudflare Workers** - Global edge deployment with static assets
+- **WebGL** - Custom vertex and fragment shaders with noise-based algorithms
+- **Vanilla JavaScript** - Modular ES6+ architecture with observer pattern
+- **CSS Grid/Flexbox** - Responsive UI design with unified dark theme
+- **Cloudflare Workers** - Global edge deployment with HTMLRewriter for security
+- **Environment Variables** - Secure analytics token management
 
 ## 📁 Project Structure
 
 ```
 /
 ├── public/                 # Static assets
-│   ├── css/               # Stylesheets
+│   ├── css/               # Stylesheets (unified dark theme)
 │   ├── js/                # JavaScript modules
 │   ├── shaders/           # WebGL shaders (GLSL)
 │   └── index.html         # Main HTML file
-├── wrangler.jsonc         # Cloudflare Workers config
+├── src/                   # Worker source
+│   └── index.js           # Cloudflare Worker with HTMLRewriter
+├── scripts/               # Build and setup scripts
+│   └── setup-analytics.js # Secure analytics configuration
+├── wrangler.jsonc         # Cloudflare Workers config with environment variables
 ├── package.json           # Dependencies and scripts
+├── ANALYTICS_SETUP.md     # Security-focused analytics guide
+├── CLAUDE.md              # Development guidance
 └── README.md
 ```
 
@@ -106,7 +119,15 @@ npm run deploy
 - **WebGL Required** - Modern browsers with WebGL support
 - **MediaRecorder API** - For video recording (Chrome, Firefox, Safari)
 - **Canvas API** - For image export (all modern browsers)
-- **Mobile Responsive** - Touch-friendly controls
+- **Mobile Responsive** - Touch-friendly controls with collapsible panels
+- **Progressive Enhancement** - Graceful fallbacks for unsupported features
+
+## 🔒 Security Features
+
+- **Secure Analytics** - Environment variable token management with HTMLRewriter
+- **No Hardcoded Secrets** - All sensitive data handled via environment variables
+- **Runtime Injection** - Analytics tokens injected securely at edge
+- **Version Control Safe** - No sensitive information in source code
 
 ## 🙏 Acknowledgments
 

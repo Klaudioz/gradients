@@ -15,7 +15,7 @@ class WebGLRenderer {
         
         if (!this.gl) {
             console.error('WebGL not supported');
-            return;
+            throw new Error('WebGL not supported in this browser');
         }
         
         this.resize();
@@ -57,6 +57,7 @@ class WebGLRenderer {
             
         } catch (error) {
             console.error('Failed to load shaders:', error);
+            throw error;
         }
     }
     

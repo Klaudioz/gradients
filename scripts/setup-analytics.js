@@ -11,31 +11,30 @@ const rl = readline.createInterface({
 
 function updateAnalyticsToken(token) {
   try {
-    // Update wrangler.jsonc
+    // Update wrangler.jsonc with the token in vars
     const wranglerPath = path.join(__dirname, '..', 'wrangler.jsonc');
     let wranglerContent = fs.readFileSync(wranglerPath, 'utf8');
-    wranglerContent = wranglerContent.replace(
-      'YOUR_CLOUDFLARE_BEACON_TOKEN_HERE',
-      token
-    );
-    fs.writeFileSync(wranglerPath, wranglerContent);
-    console.log('✅ Updated wrangler.jsonc');
-
-    // Update index.html
-    const htmlPath = path.join(__dirname, '..', 'public', 'index.html');
-    let htmlContent = fs.readFileSync(htmlPath, 'utf8');
-    htmlContent = htmlContent.replace(
-      'YOUR_CLOUDFLARE_BEACON_TOKEN_HERE',
-      token
-    );
-    fs.writeFileSync(htmlPath, htmlContent);
-    console.log('✅ Updated index.html');
+    
+    // Parse and update the CLOUDFLARE_BEACON_TOKEN variable
+    const wranglerConfig = JSON.parse(wranglerContent);
+    if (!wranglerConfig.vars) {
+      wranglerConfig.vars = {};
+    }
+    wranglerConfig.vars.CLOUDFLARE_BEACON_TOKEN = token;
+    
+    // Write back with proper formatting
+    fs.writeFileSync(wranglerPath, JSON.stringify(wranglerConfig, null, 2));
+    console.log('✅ Updated wrangler.jsonc with environment variable');
 
     console.log('\n🎉 Analytics configuration complete!');
+    console.log('\nThe token is now stored as an environment variable and will be');
+    console.log('securely injected at runtime using HTMLRewriter.');
     console.log('\nNext steps:');
     console.log('1. Run: npm run deploy');
     console.log('2. Visit your deployed site to generate analytics data');
     console.log('3. Check Cloudflare Dashboard > Analytics & Logs > Web Analytics');
+    console.log('\n🔒 Security note: The token is stored as an environment variable,');
+    console.log('not hardcoded in your HTML or source code.');
     
   } catch (error) {
     console.error('❌ Error updating files:', error.message);
