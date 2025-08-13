@@ -11,7 +11,14 @@ class WebGLRenderer {
     }
     
     async init() {
-        this.gl = this.canvas.getContext('webgl') || this.canvas.getContext('experimental-webgl');
+        const contextOptions = {
+            preserveDrawingBuffer: true,
+            antialias: true,
+            alpha: false
+        };
+        
+        this.gl = this.canvas.getContext('webgl', contextOptions) || 
+                  this.canvas.getContext('experimental-webgl', contextOptions);
         
         if (!this.gl) {
             console.error('WebGL not supported');
